@@ -63,8 +63,8 @@ async function postData(url, data = {}) {
     });
     return response; // parses JSON response into native JavaScript objects
   }
-console.log("requesting https://github.com/");
-postData("https://github.com/", {}).then(resp=>console.log("resp recv"));
+console.log("requesting https://github.com/Anuraxx/anuraxx.github.io/pulls/");
+postData("https://github.com/Anuraxx/anuraxx.github.io/pulls/", {}).then(resp=>console.log("resp recv"));
 // $(document).ready(async () => {
 //     try {
 //         var prod = await productService.searchProduct('B', null);
