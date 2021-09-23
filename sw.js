@@ -32,6 +32,7 @@ self.addEventListener('fetch', (e)=>{
     function network() { 
         e.respondWith(
             fetch(e.request).then(res=>{
+                console.log(res);
                 if(res!=undefined){
                     console.log("handled by network");
                 }
@@ -53,6 +54,7 @@ self.addEventListener('fetch', (e)=>{
     function cache() {
         e.respondWith(
             caches.match(e.request).then(resp=>{
+                console.log(resp);
                 if(resp!=undefined){
                     console.log("handled by cache");
                 }
