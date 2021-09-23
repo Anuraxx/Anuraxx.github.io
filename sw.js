@@ -29,17 +29,20 @@ self.addEventListener('activate', (e)=>{
 self.addEventListener('fetch', (e)=>{
     console.log(e.request.url);
 
-    function networkFirst() { 
+    function network() { 
         e.respondWith(
             fetch(e.request).then(res=>{
-                console.log("using fetch");
+                if(res!=undefined){
+                    console.log("handled by network");
+                }
+                //console.log("using fetch");
                 let cloneRes = res.clone();
                 caches.open(cacheName).then(cache=>{
                     cache.put(e.request, cloneRes);
                 });
                 return res;
             }).catch(err=>{
-                console.log("using cache");
+                console.log("request failed");
                 //caches.match(e.request).then(res=>{return res;});
             })
             // caches.match(e.request).then(res=>{
@@ -47,12 +50,15 @@ self.addEventListener('fetch', (e)=>{
             // })
         );
     }
-    function cacheFirst() {
+    function cache() {
         e.respondWith(
             caches.match(e.request).then(resp=>{
-                return resp || networkFirst();
+                if(resp!=undefined){
+                    console.log("handled by cache");
+                }
+                return resp || network();
             })
         )
     }
-    cacheFirst();
+    cache();
 })
