@@ -1,15 +1,21 @@
 const cacheName = 'pwa.smlx.v1';
- const cacheStaticAssets=[
-     './'
- ];
+//const cacheStaticAssets= 
+
 self.addEventListener('install', (e)=>{
     console.log('sw installed');
 
-    //  e.waitUntil(
-    //      caches.open(cacheName).then(cache=>{
-    //          return cache.addAll(cacheStaticAssets);
-    //      }).then(() => self.skipWaiting())
-    //  );
+     e.waitUntil(
+         caches.open(cacheName).then(cache=>{
+            // return cache.addAll(cacheStaticAssets);
+            fetch('./cacheStaticAssets.json').then((dataArray)=>{
+                dataArray.text().then(async(assetArray)=>{
+                    //console.log(d)
+                    assetArray = JSON.parse(assetArray);
+                    return cache.addAll(assetArray);
+                })
+            }).catch(err=>console.log('failed to load static cache assets'));
+         }).then(() => self.skipWaiting())
+     );
 })
 
 self.addEventListener('activate', (e)=>{
@@ -27,40 +33,44 @@ self.addEventListener('activate', (e)=>{
 })
 
 self.addEventListener('fetch', (e)=>{
-    console.log(e.request.url);
+    //console.log(e.request.url);
 
-    function network() { 
-        e.respondWith(
-            fetch(e.request).then(res=>{
-                console.log(res);
-                if(res!=undefined){
-                    console.log("handled by network");
-                }
-                //console.log("using fetch");
-                let cloneRes = res.clone();
-                caches.open(cacheName).then(cache=>{
-                    cache.put(e.request, cloneRes);
-                });
-                return res;
-            }).catch(err=>{
-                console.log("request failed");
-                //caches.match(e.request).then(res=>{return res;});
-            })
-            // caches.match(e.request).then(res=>{
-            //     return res || fetch (e.request);
-            // })
-        );
-    }
-    function cache() {
+    // function handleByNetwork() { 
+    //     e.respondWith(
+    //         fetch(e.request).then(res=>{
+    //             //console.log(res);
+    //             if(res!=undefined){
+    //                 console.log("handled by network");
+    //             }
+    //             //console.log("using fetch");
+    //             let cloneRes = res.clone();
+    //             caches.open(cacheName).then(cache=>{
+    //                 cache.put(e.request, cloneRes);
+    //             });
+    //             return res;
+    //         }).catch(err=>{
+    //             console.log("request failed");
+    //         })
+    //     );
+    // }
+    function handleByCache() {
         e.respondWith(
             caches.match(e.request).then(resp=>{
-                console.log(resp);
+                //console.log(resp);
                 if(resp!=undefined){
-                    console.log("handled by cache");
+                    //console.log("handled by cache");
                 }
-                return resp || network();
+                return resp ;
+                // || fetch(e.request).then(response=>{
+                //     console.log("resolved by network");
+                //     let cloneRes = response.clone();
+                //     caches.open(cacheName).then(cache=>{
+                //         cache.put(e.request, cloneRes);
+                //     });
+                //     return response;
+                // })
             })
         )
     }
-    cache();
+    handleByCache();
 })

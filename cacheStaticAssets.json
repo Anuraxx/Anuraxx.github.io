@@ -1,0 +1,18 @@
+[
+    "./",
+    "./index.html",
+    "./schema.js",
+    "./main.js",
+    "./IDB.js",
+    "./services/ProductService.js",
+    "./utils/utility.js",
+    "./cache/ProductCache.js",
+    "./controllers/AppController.js",
+    "./dao/ProductDao.js",
+    "./modules/FileSaver.js",
+    "./modules/indexeddb-export-import/index.js",
+    "./modules/shim.min.js",
+    "./modules/xlsx/xlsx/dist/xlsx.full.min.js",
+    "./modules/angularjs/1.6.9/angular.min.js",
+    "./modules/jquery-3.6.0.js"
+]
