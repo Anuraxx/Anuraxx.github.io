@@ -63,7 +63,7 @@ async function postData(url, data = {}) {
     });
     return response; // parses JSON response into native JavaScript objects
   }
-
+console.log("requesting https://github.com/");
 postData("https://github.com/", {}).then(resp=>console.log("resp recv"));
 // $(document).ready(async () => {
 //     try {
