@@ -29,20 +29,30 @@ self.addEventListener('activate', (e)=>{
 self.addEventListener('fetch', (e)=>{
     console.log(e.request.url);
 
-    e.respondWith(
-        fetch(e.request).then(res=>{
-            console.log("using fetch");
-            let cloneRes = res.clone();
-            caches.open(cacheName).then(cache=>{
-                cache.put(e.request, cloneRes);
-            });
-            return res;
-        }).catch(err=>{
-            console.log("using cache");
-            caches.match(e.request).then(res=>{return res;});
-        })
-        // caches.match(e.request).then(res=>{
-        //     return res || fetch (e.request);
-        // })
-    );
+    function networkFirst() { 
+        e.respondWith(
+            fetch(e.request).then(res=>{
+                console.log("using fetch");
+                let cloneRes = res.clone();
+                caches.open(cacheName).then(cache=>{
+                    cache.put(e.request, cloneRes);
+                });
+                return res;
+            }).catch(err=>{
+                console.log("using cache");
+                //caches.match(e.request).then(res=>{return res;});
+            })
+            // caches.match(e.request).then(res=>{
+            //     return res || fetch (e.request);
+            // })
+        );
+    }
+    function cacheFirst() {
+        e.respondWith(
+            caches.match(e.request).then(resp=>{
+                return resp || networkFirst();
+            })
+        )
+    }
+    cacheFirst();
 })
