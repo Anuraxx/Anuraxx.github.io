@@ -134,7 +134,7 @@ async function loadIDBdata() {
         //     // }
             console.log("loding data");
             var items = await getJsonFromFile('./resources/idbToJson2.json');
-            console.log(items);
+        //    console.log(items);
             //var objectStore = await getObjectStore("products", objectstorePermission.RW); 
             importIdbFromJson(idb, items);
         // }
