@@ -3,6 +3,7 @@
 import * as productService from './services/ProductService.js';
 import { sheetToJson, Timer, jsonToSheet} from './utils/utility.js';
 
+
 if('serviceWorker' in navigator){
     //console.log('service worker supported');
     window.onload = ()=>{
@@ -15,6 +16,14 @@ if('serviceWorker' in navigator){
     }
 }
 
+$('button').on('click', function(){
+  console.log('clicked');
+  $(this).addClass('btn-click');
+  setTimeout(()=>{
+    $(this).removeClass('btn-click');
+  },100)
+  
+})
 
 var fd = null;
 $('#file_upload_test_form').submit(async function (e) { 
@@ -28,12 +37,14 @@ $('#file_upload_test_form').submit(async function (e) {
     //var data = new Uint8Array(filedata);
     //var v = await utils.promiseTest();
     //console.log(v);
-    let jfs = await sheetToJson(filedata);
-    let _jfs = {"sample":jfs};
+    sheetToJson(filedata).then(jsonData => {
+      productService.importIdbFromJsonServ({"sample":jsonData, "orders":{}, "pendingInvoice":{}});
+    });
     //_jfs.employee=jfs;
     //console.log(_jfs);
     //idb.importIDBFromJson(_jfs);
-    productService.importIdbFromJsonServ(_jfs);
+    
+    
     //  let idbdata = await productService.exportIdbToJsonServ();
     //  console.log(idbdata);
     //  let file = new File([""], './resources/Sample1K.xlsx', {type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
@@ -42,10 +53,6 @@ $('#file_upload_test_form').submit(async function (e) {
     //console.log(emp);
     //jsonToSheet(idbdata['employee']);
 });
-
-function clearDatabase(){
-    productService.clearDatabaseServ();
-}  
 async function postData(url, data = {}) {
     // Default options are marked with *
     const response = await fetch(url, {
@@ -74,6 +81,16 @@ async function postData(url, data = {}) {
 //         console.log(error);
 //     }
 // });
+
+
+//console.log(new Sample("desc","emarkme","leav","id","name").get());
+// $("#cart").click(function () {
+//   $(this).hide();
+// })
+
+
+// Set up quantity forms
+
 
 
 

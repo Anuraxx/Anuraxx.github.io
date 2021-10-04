@@ -36,20 +36,11 @@ export const createSchema = {
         }
         return objectStore;
     },
-    "invoice": function (idb) {
+    "pendingInvoice": function (idb) {
         let objectStore = null;
         try {
-            objectStore = idb.createObjectStore("invoice", {
+            objectStore = idb.createObjectStore("pendingInvoice", {
                 keyPath: "id"
-            });
-            objectStore.createIndex("name", "name", {
-                unique: false
-            });
-            objectStore.createIndex("total_units", "total_units", {
-                unique: false
-            });
-            objectStore.createIndex("avl_units", "avl_units", {
-                unique: false
             });
         } catch (error) {
             throw error;
@@ -72,5 +63,15 @@ export const createSchema = {
             throw error;
         }
         return objectStore;
+    },
+    "orders":function (idb) {
+        try {
+            return idb.createObjectStore("orders", {
+                keyPath: "id"
+            });
+        } catch (error) {
+            throw error;
+        }
     }
+
 }

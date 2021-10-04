@@ -1,4 +1,6 @@
-import * as pd from '../dao/ProductDao.js';
+import {productDao as pd} from '../dao/ProductDao.js';
+import { test } from '../test/test1.js';
+import { Timer } from '../utils/utility.js';
 
 function compareProductByName(str1, str2, m, n){
     if(m==0 || n==0) return [false];
@@ -111,93 +113,85 @@ export async function searchProduct(name){
 //     //console.log("products loaded");
 // }
 export async function reloadProductsCache() {
-    pd.reloadProductCache();
+    return pd.reloadProductCache();
 }
 
-function getOperationalIndex(query, prvQuery){
-    let maxLen = Math.max(query.length,prvQuery.length);
-    for(let i=0;i<maxLen;i++){
-        if(query[i]!=prvQuery[i]){
-            return i;
-        }
-    }
-    return -1;
-}
-
-
-export async function _searchProduct(query, prvQuery, queryResult){
-    let products = null;
-    if(queryResult==null || queryResult.length==0){
-        queryResult = new Array();
-        console.log("product : null");
-        products = await pd.getProducts();
-        queryResult.push(products);
-        return searchProduct(query, prvQuery, queryResult);
-    }else{
-        //products = queryResult[queryResult.length-1];
-    }
-    let searchResult = new Array();
-    let operationalIndx= null;
-    if(query!=''){
-        operationalIndx = getOperationalIndex(query, prvQuery);
-        let qlen = query.length;
-        let pqlen = prvQuery.length;
-        if(qlen<pqlen){
-            //pop all objects from operIndx
-            //search query in queryResult[last]
-            //pop
-            //push result in queryResult and return result
-            while(queryResult.length!=operationalIndx){
-                queryResult.pop();
-            }
-            products = queryResult[queryResult.length-1];
-            queryResult.pop();
-        }else{
-            if(qlen>pqlen){
-                //search query in queryResult[last]
-                //pop all objects from operIndx
-                //push result in queryResult and return result
-                products = queryResult[queryResult.length-1];
-                while(queryResult.length!=operationalIndx){
-                    queryResult.pop();
-                }
-            }else{
-                return queryResult;
-            }
-        }
-    }else{
-        return new Array();
-    }
-    //console.log("p size : "+products.length);
-    
-    products.forEach(product => {
-        try{
-            let matchResult = compareProductByName(query.toLowerCase(), product.name.toLowerCase(), query.length, product.name.length);
-            if(matchResult[0]){
-                product.priority = matchResult[1];
-                searchResult.push(product);
-            };
-        }catch(error){
-            console.log("error at : ");
-            console.log(product);
-            throw error;
-        }
-    });
-    //console.log(searchResult);
-    queryResult.push(searchResult);
-    return queryResult;
-
-}
-
-
-
-//    var prod = products.get(name);
-//    return new Promise((resolve)=>{
-//         prod.onsuccess=function(e){
-//             var res = e.target.result;
-//             resolve(res);
+// function getOperationalIndex(query, prvQuery){
+//     let maxLen = Math.max(query.length,prvQuery.length);
+//     for(let i=0;i<maxLen;i++){
+//         if(query[i]!=prvQuery[i]){
+//             return i;
 //         }
-//    });
+//     }
+//     return -1;
+// }
+
+
+// export async function _searchProduct(query, prvQuery, queryResult){
+//     let products = null;
+//     if(queryResult==null || queryResult.length==0){
+//         queryResult = new Array();
+//         console.log("product : null");
+//         products = await pd.getProducts();
+//         queryResult.push(products);
+//         return searchProduct(query, prvQuery, queryResult);
+//     }else{
+//         //products = queryResult[queryResult.length-1];
+//     }
+//     let searchResult = new Array();
+//     let operationalIndx= null;
+//     if(query!=''){
+//         operationalIndx = getOperationalIndex(query, prvQuery);
+//         let qlen = query.length;
+//         let pqlen = prvQuery.length;
+//         if(qlen<pqlen){
+//             //pop all objects from operIndx
+//             //search query in queryResult[last]
+//             //pop
+//             //push result in queryResult and return result
+//             while(queryResult.length!=operationalIndx){
+//                 queryResult.pop();
+//             }
+//             products = queryResult[queryResult.length-1];
+//             queryResult.pop();
+//         }else{
+//             if(qlen>pqlen){
+//                 //search query in queryResult[last]
+//                 //pop all objects from operIndx
+//                 //push result in queryResult and return result
+//                 products = queryResult[queryResult.length-1];
+//                 while(queryResult.length!=operationalIndx){
+//                     queryResult.pop();
+//                 }
+//             }else{
+//                 return queryResult;
+//             }
+//         }
+//     }else{
+//         return new Array();
+//     }
+//     //console.log("p size : "+products.length);
+    
+//     products.forEach(product => {
+//         try{
+//             let matchResult = compareProductByName(query.toLowerCase(), product.name.toLowerCase(), query.length, product.name.length);
+//             if(matchResult[0]){
+//                 product.priority = matchResult[1];
+//                 searchResult.push(product);
+//             };
+//         }catch(error){
+//             console.log("error at : ");
+//             console.log(product);
+//             throw error;
+//         }
+//     });
+//     //console.log(searchResult);
+//     queryResult.push(searchResult);
+//     return queryResult;
+
+// }
+
+
 
 export function importIdbFromJsonServ(jsonObject) {
     try {
@@ -220,4 +214,48 @@ export function exportIdbToJsonServ(){
 
 export function clearDatabaseServ(){
     pd.clearDatabaseDao();
+}
+
+export async function updateLeaveServ(id){
+    return pd.updateLeaveDao(id);
+}
+export async function deleteProductServ(id){
+    return pd.deleteProductDao(id);
+}
+export async function addNewProductServ() {
+    class Sample{
+        // #Description;
+        // #Employee_Markme;
+        // #Leave;
+        // #id;
+        // #name;
+        constructor(a,b,c,d,e){
+            this.Description=a;
+            this.Employee_Markme=b;
+            this.Leave=c;
+            this.id=d;
+            this.name=e;
+        }
+        get(){
+            return this;
+        }
+    }
+    return pd.addProductDao(new Sample("GBD BOOKS","Mark",0,Date.now(), "HEIDI").get());
+
+}
+
+export async function getProductById(id){
+    return pd.getProductById(id);
+    //return test.getMsg();
+}
+
+export async function getProductsByIds(idList){
+    if(idList instanceof Array){
+        let listOfProducts = [];
+        idList.forEach(async (id)=>{
+            listOfProducts.push(await pd.getProductById(id));
+        })
+        return listOfProducts;
+    }
+    return null;
 }

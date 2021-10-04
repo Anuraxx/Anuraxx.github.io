@@ -1,0 +1,21 @@
+{
+    "name": "Invoice Ready",
+    "short_name": "Invoice Ready",
+    "lang": "en-US",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#5a7c71",
+    "theme_color": "black",
+    "icons": [
+      {
+        "src": "./resources/images/logo/clipart1342598_192px.png",
+        "sizes": "192x192",
+        "purpose": "any"
+      },
+      {
+        "src": "./resources/images/logo/clipart1342598_512px.png",
+        "sizes": "512x512",
+        "purpose": "any"
+      }
+    ]
+  }

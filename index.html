@@ -3,13 +3,43 @@
 <head>
     <!-- <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script> -->
     <script src="./modules/angularjs/1.6.9/angular.min.js"></script>
+    <link rel="manifest" href="manifest.json">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Invoice Ready">
+    <meta name="apple-mobile-web-app-title" content="Invoice Ready">
+    <meta name="theme-color" content="black">
+    <meta name="msapplication-navbutton-color" content="#5a7c71">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="msapplication-starturl" content="/">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="icon" sizes="192x192" href="./resources/images/logo/clipart1342598_192px.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="./resources/images/logo/clipart1342598_192px.png">
+    <link rel="icon" sizes="512x512" href="./resources/images/logo/clipart1342598_512px.png">
+    <link rel="apple-touch-icon" sizes="512x512" href="./resources/images/logo/clipart1342598_512px.png">
+    <link href="./resources/css/style.css" rel="stylesheet" type="text/css" />
+
     <style>
         *,
         *:focus,
         *:hover {
             outline: none;
         }
-
+        *:link, *:visited, *:active{
+            color: unset;
+            font-style: italic;
+        }
+        *{
+            padding: 5px;
+            outline: none;
+            border: none;
+        }
+        .btn-click{
+            border-color: gainsboro;
+            border-width:0px 1px 1px 0px;
+            border-style: solid;
+        }
         #opt {
             min-width: 300px;
             min-height: 100px;
@@ -22,6 +52,7 @@
             width: inherit;
             padding: 10px;
             margin: 0;
+            list-style-type: none;
         }
 
         #src-inp {
@@ -44,6 +75,53 @@
         #load-more{
             text-align: center;
         }
+        ul{
+            padding: 0;
+        }
+        .pricebar{
+            color: white;
+            background-color: rgb(47, 54, 35);
+            float: right;
+            padding: 3px;
+            position: absolute;
+            right: 20px;
+        }
+        .search-result{
+            position: relative;
+        }
+        #cart{
+            background-color: black;
+            color: white;
+        }
+        #close{
+            float: right;
+            background-color: red;
+            color: white;
+            padding: 3;
+        }
+        .hide{
+            /* visibility: hidden; */
+            display: none;
+        }
+        #onhoverItemSelector{
+
+        }
+        .active{
+            filter: blur(2px);
+        }
+        .selectedItem{
+            background-color: khaki;
+        }
+        
+        .submitItemButton{
+            padding: 0;
+            background: unset;
+        }
+        @media screen and (max-width: 800px) {
+            .container{
+                max-width: 100% ;
+            }
+        }
     </style>
 </head>
 
@@ -53,7 +131,7 @@
     <div style="width: 100%;">
         <div class="container" ng-app="App" ng-controller="AppController" ng-init="searchResults=[]; setLoadMoreButtonVisibility()">
             <div id="searchResCont" >
-                <form id="file_upload_test_form">
+                <form id="file_upload_test_form" action="#">
                     Select File: <input type="file" name="inpfile" id="inpfile">
                     <input type="submit" value="submit">
                 </form>
@@ -67,13 +145,28 @@
                 
 
                 <input id="src-inp" class="ser-bar" type="text" placeholder="search product" 
-                    ng-change="refresh()" ng-model="srcpd"> <button ng-click="reset()">clear</button>
+                    ng-change="refresh()" ng-model="srcpd"> <button id="cha" ng-click="reset()">clear</button>
                 <!-- <p id="opt" ng-model="output">{{output}}</p> -->
-                <ul class="ser-bar" ng-repeat="x in searchResults">{{x.name}}</ul>
+                <ul id="search-result-list-container" >
+                    <li id="_{{x.id}}" class="search-result ser-bar " ng-repeat="x in searchResults"  ng-click="proceedWithListItem(this)">
+                        {{x.name}}<span class="pricebar"><b>&#8377</b> {{x.price}}</span> 
+                    </li>
+                    <div id="onhoverSpinnerCont">
+                        <form>
+                            <fieldset data-quantity></fieldset>
+                            <button class="submitItemButton" id="selectItemButton"><img src="./resources/images/checked32.png" alt=""> </button>
+                            <button class="submitItemButton" id="cancelItemButton"><img src="./resources/images/icons8-cancel-48.png" alt=""> </button>
+                        </form>
+                        
+                    </div>
+                </ul>
+                <!-- <li></li><li>{{x.price}}</li> -->
                 <ul id="load-more"><button ng-click="next50result()">load more</button></ul>
                 
             </div>
-            <p>{{searchTime}}</p>
+            <p>{{searchTimeLog}}</p>
+            <div id="cart" class="hide">{{selectedItemsCount}} item is ready for billing <a href>proceed</a><button id='close' >x</button></div>
+            <!-- href="./invoice.html" -->
         </div>
     </div>
     

@@ -1,4 +1,4 @@
-var app = angular.module("myApp", []);
+var app = angular.module("test", []);
 
 app.controller('testc', function($scope){
     console.log("test controller working");

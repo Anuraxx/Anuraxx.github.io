@@ -41,8 +41,9 @@ IDBrequest.onupgradeneeded = async function (e) {
     idb = e.target.result;
     try {
         //createSchema.products(idb);
-        //createSchema.invoice(idb);
+        createSchema.pendingInvoice(idb);
         createSchema.sample(idb);
+        createSchema.orders(idb);
     } catch (error) {
         //console.log(error);
         throw error;
@@ -88,16 +89,13 @@ function isDbAccessible() {
     });
 }
 export async function getObjectStore(storename, permission) {
-    try{
-        //openIDB();
-        let dba = await isDbAccessible();
-        var transaction = idb.transaction(storename, permission);
-        return transaction.objectStore(storename);
-    }catch(error){
-        throw error;
-    }finally{
-        //idb.close();
-    }
+    return new Promise((resolve, reject) => {    
+        isDbAccessible().then(flag=>{
+            var transaction = idb.transaction(storename, permission);
+            resolve(transaction.objectStore(storename));
+        }).catch(err=>{console.log("Failed to get object store");})
+    });
+    
 }
 
 
@@ -133,8 +131,8 @@ async function loadIDBdata() {
         //     //     loadIDBdata();
         //     // }
             console.log("loding data");
-            var items = await getJsonFromFile('./resources/idbToJson2.json');
-        //    console.log(items);
+            var items = await getJsonFromFile('./resources/sampleImport.json');
+            //console.log(items);
             //var objectStore = await getObjectStore("products", objectstorePermission.RW); 
             importIdbFromJson(idb, items);
         // }
@@ -196,18 +194,23 @@ export async function exportIdbToJson(idbResult){
   }
   
 export async function importIdbFromJson(idbResult, jsonString){
-    await isDbAccessible();
-    jsonString = JSON.stringify(jsonString);
-    IDBExportImport.clearDatabase(idbResult==null?idb:idbResult, function(err) {
-      if (!err) { // cleared data successfully
-        IDBExportImport.importFromJsonString(idbResult==null?idb:idbResult, jsonString, function(err) {
-          if (!err) {
-            console.log('Imported data successfully');
-            alert('Imported data successfully');
-          }
-        });
-      }
+    return new Promise((resolve, reject) => {    
+        isDbAccessible().then(()=>{
+            jsonString = JSON.stringify(jsonString);
+            IDBExportImport.clearDatabase(idbResult==null?idb:idbResult, function(err) {
+                if (!err) { // cleared data successfully
+                    IDBExportImport.importFromJsonString(idbResult==null?idb:idbResult, jsonString, function(err) {
+                        if (!err) {
+                            console.log('Imported data successfully');
+                            alert('Imported data successfully');
+                            resolve();
+                        }
+                    });
+                }
+            });
+        })
     });
+    
   }
 
 // export async function importIDBFromJson(jsonString){
