@@ -116,6 +116,7 @@
         .submitItemButton{
             padding: 0;
             background: unset;
+            display: none;
         }
         @media screen and (max-width: 800px) {
             .container{
@@ -145,7 +146,7 @@
                 
 
                 <input id="src-inp" class="ser-bar" type="text" placeholder="search product" 
-                    ng-change="refresh()" ng-model="srcpd"> <button id="cha" ng-click="reset()">clear</button>
+                    ng-change="refresh()" ng-model="srcpd"> <button id="cha" ng-click="resetSearchInputArea()">clear</button>
                 <!-- <p id="opt" ng-model="output">{{output}}</p> -->
                 <ul id="search-result-list-container" >
                     <li id="_{{x.id}}" class="search-result ser-bar " ng-repeat="x in searchResults"  ng-click="proceedWithListItem(this)">

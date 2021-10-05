@@ -3,11 +3,8 @@ import { searchProduct, reloadProductsCache, clearDatabaseServ, updateLeaveServ,
 import { Timer, monitorExecTime } from '../utils/utility.js';
 import QuantityInput from '../resources/js/quantity.js';
 import { invoiceService } from "../services/InvoiceService.js";
-//console.log('product controller loaded');
-var app = angular.module("App", []);
 
-
-app.controller('AppController', function($scope, $timeout){
+angular.module("App", []).controller('AppController', function($scope, $timeout){
     
     reloadProductsCache();
     let loadmorebotton = document.getElementById('load-more');
@@ -123,7 +120,7 @@ app.controller('AppController', function($scope, $timeout){
             $(loadmorebotton).show();
         }
     }
-    $scope.reset = function(){
+    $scope.resetSearchInputArea = function(){
         //$scope.$apply();
         //$scope.$applyAsync();
         $('#src-inp').val('');
@@ -136,6 +133,8 @@ app.controller('AppController', function($scope, $timeout){
         upto=0;
         totalSearchCount=0;
         this.setLoadMoreButtonVisibility();
+        activeElement=null;
+        setItemSubmitButtonVisibility();
     }
     $scope.clearDatabase= function(){
         clearDatabaseServ();
@@ -171,7 +170,9 @@ app.controller('AppController', function($scope, $timeout){
     }
     $scope.proceedWithListItem= function (listElem) {
         activeElement = listElem;
-        quantityInput.reset();
+        const val = selectedItems.get(listElem.x.id) != undefined ? selectedItems.get(listElem.x.id).qty : 1;
+        const max = listElem.x.avbl_units;
+        quantityInput.reset(max, val);
         let listElemId = "#_"+listElem.x.id;
         activeElement.id = listElemId;
         if(prevSelectedListItem!=null){
@@ -182,10 +183,33 @@ app.controller('AppController', function($scope, $timeout){
         // console.log(elemId);
         $(listElemId).addClass("active");
         prevSelectedListItem = listElem;
-        quantityInput.max = listElem.x.avbl_units;
-
+        //quantityInput.max = listElem.x.avbl_units;
+        setItemSubmitButtonVisibility();
         
     }
+    function setItemSubmitButtonVisibility(){
+        if(activeElement != null){
+            if(selectedItems.has(activeElement.x.id)){
+                if(selectedItems.get(activeElement.x.id).qty!=quantityInput.input.value){
+                    $("#selectItemButton").show();
+                    $("#cancelItemButton").hide();
+                }else{
+                    $("#cancelItemButton").show();
+                    $("#selectItemButton").hide();
+                }
+            }else{
+                $("#selectItemButton").show();
+                $("#cancelItemButton").hide();
+            }
+        }else{
+            $("#selectItemButton").hide();
+            $("#cancelItemButton").hide();
+        }
+    }
+
+    quantityInput.subtract.addEventListener('click', () => setItemSubmitButtonVisibility());
+    quantityInput.add.addEventListener('click', () => setItemSubmitButtonVisibility());
+
     $("#selectItemButton").on('click', () =>{
         if(activeElement!=null){
             $(activeElement.id).addClass("selectedItem");
@@ -196,6 +220,7 @@ app.controller('AppController', function($scope, $timeout){
             
             console.log(selectedItems);
             updateCart();
+            setItemSubmitButtonVisibility();
         }
         
     });
@@ -205,6 +230,7 @@ app.controller('AppController', function($scope, $timeout){
             selectedItems.delete(activeElement.x.id);
             console.log(selectedItems);
             updateCart();
+            setItemSubmitButtonVisibility();
         }
         
     });
@@ -243,7 +269,6 @@ app.controller('AppController', function($scope, $timeout){
             console.log("order created");
             location.replace("/invoice.html");
         });
-        
     })
 
 

@@ -42,9 +42,9 @@ export default class QuantityInput {
     self.appendChild(this.add);
   }
 
-  reset(){
-    this.max = 1;
-    this.input.value = 1;
+  reset(max, val){
+    this.max = max!=undefined ? max : this.max;
+    this.input.value = val!=undefined ? val : this.input.value;
   }
 
   change_quantity(change) {
