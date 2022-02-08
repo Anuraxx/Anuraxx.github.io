@@ -194,6 +194,7 @@ export async function reloadProductsCache() {
 
 
 export function importIdbFromJsonServ(jsonObject) {
+    //del
     try {
         let id =Date.now();
         let samp = jsonObject["sample"];
@@ -209,20 +210,25 @@ export function importIdbFromJsonServ(jsonObject) {
 }
 
 export function exportIdbToJsonServ(){
+    //del
     return pd.exportIdbToJsonDao();
 }
 
-export function clearDatabaseServ(){
-    pd.clearDatabaseDao();
+export function clearDatabaseServ(objectStoreNamesList){
+    //del
+    pd.clearDatabaseDao(objectStoreNamesList);
 }
 
 export async function updateLeaveServ(id){
+    //del
     return pd.updateLeaveDao(id);
 }
 export async function deleteProductServ(id){
+    //del
     return pd.deleteProductDao(id);
 }
 export async function addNewProductServ() {
+    //del
     class Sample{
         // #Description;
         // #Employee_Markme;
@@ -250,12 +256,26 @@ export async function getProductById(id){
 }
 
 export async function getProductsByIds(idList){
-    if(idList instanceof Array){
-        let listOfProducts = [];
-        idList.forEach(async (id)=>{
-            listOfProducts.push(await pd.getProductById(id));
-        })
-        return listOfProducts;
+    
+    return new Promise(async (resolve)=>{
+        if(idList instanceof Array){
+            let productsMap = new Map();
+            for(let c=0;c<idList.length;c++){
+                await pd.getProductById(idList[c]).then((resp)=>{
+                    productsMap.set(resp.id, resp);
+                });
+            }
+            resolve(productsMap);
+        }else{
+            resolve(null);
+        }
+
+    });
+}
+
+export async function updateOrderProductData(invoiceOrderData){
+    for(let c=0;c<invoiceOrderData.productDesc.length;c++){
+        await pd.updateProductQty(invoiceOrderData.productDesc[c]);
     }
-    return null;
+    return Promise.resolve();
 }

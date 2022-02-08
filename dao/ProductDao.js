@@ -19,8 +19,11 @@ class ProductDao{
             productsOs.getAll().onsuccess = function(e){
                 let res = e.target.result;
                 //console.log(res.value);
-                res.forEach(element => {
-                    products.push(element);
+                res.forEach(product => {
+                    if(product.avbl_units>0){
+                        products.push(product);
+                    }
+                    
                 });
                 resolve(products);
             }
@@ -71,7 +74,7 @@ class ProductDao{
     }
     
     importIdbFromJsonDao(jsonObject){
-        importIdbFromJson(null,jsonObject).then(()=>{
+        importIdbFromJson(jsonObject).then(()=>{
             this.reloadProductCache();
         });
         //loadIDBdata();
@@ -81,8 +84,8 @@ class ProductDao{
         return exportIdbToJson(null);
     }
     
-    clearDatabaseDao(){
-        clearDatabase();
+    clearDatabaseDao(objectStoreNamesList){
+        clearDatabase(objectStoreNamesList);
     }
     
     async updateLeaveDao(id){
@@ -150,6 +153,22 @@ class ProductDao{
         })
     }
 
+    async updateProductQty(productData){
+        return new Promise((resolve)=>{
+            getObjectStore('sample', objectstorePermission.RW).then(objectStore=>{
+                objectStore.openCursor(parseInt(productData.id_product)).onsuccess = function(e){
+                    let cursor = e.target.result;
+                    let cursorObj = cursor.value;
+                    cursorObj.avbl_units -= parseInt(productData.qty)>=parseInt(cursorObj.avbl_units)?parseInt(productData.qty):0;
+                    cursor.update(cursorObj).onsuccess = function() {
+                        //console.log(`Leave update for id : ${id}`);
+                        resolve();
+                    };
+                    
+                }
+            });
+        });
+    }
     
 }
 

@@ -24,6 +24,18 @@ class InvoiceDao{
             })
         })
     }
+
+    async createNewPendingInvoice(pendingInvoice){
+        return new Promise((resolve)=>{
+            getObjectStore('pendingInvoice', objectstorePermission.RW).then(objectStore=>{
+                objectStore.clear().onsuccess = ()=>{
+                    objectStore.add(pendingInvoice).onsuccess = function(e) {
+                        resolve();
+                    }
+                }
+            })
+        })
+    }
 }
 
 export const invoiceDao = new InvoiceDao();

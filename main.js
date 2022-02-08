@@ -38,8 +38,9 @@ $('#file_upload_test_form').submit(async function (e) {
     //var v = await utils.promiseTest();
     //console.log(v);
     sheetToJson(filedata).then(jsonData => {
-      productService.importIdbFromJsonServ({"sample":jsonData, "orders":{}, "pendingInvoice":{}});
+      productService.importIdbFromJsonServ({"sample":jsonData});
     });
+    //"orders":{}, "pendingInvoice":{}
     //_jfs.employee=jfs;
     //console.log(_jfs);
     //idb.importIDBFromJson(_jfs);

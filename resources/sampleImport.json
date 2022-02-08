@@ -1,6 +1,6 @@
 {
     "sample": [{
-        "id": "9788189999599",
+        "id": 9788189999599,
         "name": "TALES OF SHIVA",
         "Employee_Markme": "Mark",
         "Description": "mark",
@@ -10,7 +10,7 @@
         "price":13
     },
     {
-        "id": "9780099578079",
+        "id": 9780099578079,
         "name": "1Q84 THE COMPLETE TRILOGY",
         "Employee_Markme": "HARUKI MURAKAMI",
         "Description": "Mark",
@@ -20,7 +20,7 @@
         "price":13
     },
     {
-        "id": "9780198082897",
+        "id": 9780198082897,
         "name": "MY KUMAN",
         "Employee_Markme": "Mark",
         "Description": "Mark",
@@ -30,7 +30,7 @@
         "price":13
     },
     {
-        "id": "9780007880331",
+        "id": 9780007880331,
         "name": "THE GOD OF SMAAL THINGS",
         "Employee_Markme": "ARUNDHATI ROY",
         "Description": "4TH HARPER COLLINS",
@@ -40,7 +40,7 @@
         "price":13
     },
     {
-        "id": "9780545060455",
+        "id": 9780545060455,
         "name": "THE BLACK CIRCLE",
         "Employee_Markme": "Mark",
         "Description": "4TH HARPER COLLINS",
@@ -50,7 +50,7 @@
         "price":13
     },
     {
-        "id": "9788126525072",
+        "id": 9788126525072,
         "name": "THE THREE LAWS OF PERFORMANCE",
         "Employee_Markme": "Mark",
         "Description": "4TH HARPER COLLINS",
@@ -65,11 +65,11 @@
         "id":1,
         "productDesc":[
             {
-                "id_product":"9788126525072",
+                "id_product":9788126525072,
                 "qty":5
             },
             {
-                "id_product":"9780545060455",
+                "id_product":9780545060455,
                 "qty":5
             }
         ]

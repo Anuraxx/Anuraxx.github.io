@@ -1,10 +1,12 @@
 import { monitorExecTime, getJsonFromFile, sheetToJson } from './utils/utility.js';
 import { createSchema } from './schema.js';
-import * as IDBExportImport from './modules/indexeddb-export-import/index.js';
+import {IdbExportImport} from './modules/indexeddb-export-import/index.js';
+import { reloadProductsCache } from './services/ProductService.js';
 
 var IDBrequest;
 let dbExist = true;
 var idb = null;
+let idbExportImport = null;
 // export const RW = 'readwrite';
 // export const R = 'readonly';
 export const objectstorePermission = {
@@ -56,6 +58,8 @@ IDBrequest.onsuccess = function (e) {
 
     idb = e.target.result;
     try {
+        idbExportImport = new IdbExportImport(idb);
+        console.log(idb.objectStoreNames);
         dbAccessible = true;
         //exportIdbToJson(idb);
         if(!dbExist) {
@@ -134,7 +138,9 @@ async function loadIDBdata() {
             var items = await getJsonFromFile('./resources/sampleImport.json');
             //console.log(items);
             //var objectStore = await getObjectStore("products", objectstorePermission.RW); 
-            importIdbFromJson(idb, items);
+            importIdbFromJson(items).then(()=>{
+                reloadProductsCache();
+            });
         // }
         // var newItem = [
         //     { taskTitle: "Walk dog", hours: 19, minutes: 30, day: 24, month: 'December', year: 2013, notified: "no" },
@@ -180,9 +186,9 @@ async function loadIDBdata() {
 // }
 //export objectstorePermission;
 
-export async function exportIdbToJson(idbResult){
+export async function exportIdbToJson(){
     await isDbAccessible();
-    IDBExportImport.exportToJsonString(idbResult==null?idb:idbResult, function(err, jsonString) {
+    idbExportImport.exportToJsonString(function(err, jsonString) {
       if (err) {
         console.error(err);
       } else {
@@ -193,13 +199,24 @@ export async function exportIdbToJson(idbResult){
     });
   }
   
-export async function importIdbFromJson(idbResult, jsonString){
+export async function importIdbFromJson(jsonString){
     return new Promise((resolve, reject) => {    
         isDbAccessible().then(()=>{
-            jsonString = JSON.stringify(jsonString);
-            IDBExportImport.clearDatabase(idbResult==null?idb:idbResult, function(err) {
+            
+            let objectStoreNamesList = [];
+            if(jsonString!=null){
+                new Set(idb.objectStoreNames).forEach(os=>{
+                    if(jsonString[os]!=undefined){
+                        objectStoreNamesList.push(os);
+                    }
+                })
+                jsonString = JSON.stringify(jsonString);
+            }
+            idbExportImport.setObjectStoreNamesList(objectStoreNamesList);
+            //idbExportImport.objectStoreNamesList= objectStoreNamesList;
+            idbExportImport.clearDatabase(function(err) {
                 if (!err) { // cleared data successfully
-                    IDBExportImport.importFromJsonString(idbResult==null?idb:idbResult, jsonString, function(err) {
+                    idbExportImport.importFromJsonString(jsonString, function(err) {
                         if (!err) {
                             console.log('Imported data successfully');
                             alert('Imported data successfully');
@@ -218,10 +235,11 @@ export async function importIdbFromJson(idbResult, jsonString){
 //     importIdbFromJson(idb, jsonString);
 // }
 
-export async function clearDatabase(idbResult){
+export async function clearDatabase(objectStoreNamesList){
     try {
         //await isDbAccessible();
-        IDBExportImport.clearDatabase(idbResult==null?idb:idbResult, function(err) {
+        idbExportImport.setObjectStoreNamesList(objectStoreNamesList);
+        idbExportImport.clearDatabase(function(err) {
             if(err){
                 throw err;
             }

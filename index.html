@@ -26,20 +26,26 @@
         *:hover {
             outline: none;
         }
-        *:link, *:visited, *:active{
+
+        *:link,
+        *:visited,
+        *:active {
             color: unset;
             font-style: italic;
         }
-        *{
+
+        * {
             padding: 5px;
             outline: none;
             border: none;
         }
-        .btn-click{
+
+        .btn-click {
             border-color: gainsboro;
-            border-width:0px 1px 1px 0px;
+            border-width: 0px 1px 1px 0px;
             border-style: solid;
         }
+
         #opt {
             min-width: 300px;
             min-height: 100px;
@@ -72,13 +78,16 @@
             max-width: 50vw;
             margin: auto;
         }
-        #load-more{
+
+        #load-more {
             text-align: center;
         }
-        ul{
+
+        ul {
             padding: 0;
         }
-        .pricebar{
+
+        .pricebar {
             color: white;
             background-color: rgb(47, 54, 35);
             float: right;
@@ -86,41 +95,47 @@
             position: absolute;
             right: 20px;
         }
-        .search-result{
+
+        .search-result {
             position: relative;
         }
-        #cart{
+
+        #cart {
             background-color: black;
             color: white;
         }
-        #close{
+
+        #close {
             float: right;
             background-color: red;
             color: white;
             padding: 3;
         }
-        .hide{
+
+        .hide {
             /* visibility: hidden; */
             display: none;
         }
-        #onhoverItemSelector{
 
-        }
-        .active{
+        #onhoverItemSelector {}
+
+        .active {
             filter: blur(2px);
         }
-        .selectedItem{
+
+        .selectedItem {
             background-color: khaki;
         }
-        
-        .submitItemButton{
+
+        .submitItemButton {
             padding: 0;
             background: unset;
             display: none;
         }
+
         @media screen and (max-width: 800px) {
-            .container{
-                max-width: 100% ;
+            .container {
+                max-width: 100%;
             }
         }
     </style>
@@ -128,10 +143,11 @@
 
 <body>
 
-    
+
     <div style="width: 100%;">
-        <div class="container" ng-app="App" ng-controller="AppController" ng-init="searchResults=[]; setLoadMoreButtonVisibility()">
-            <div id="searchResCont" >
+        <div class="container" ng-app="App" ng-controller="AppController"
+            ng-init="searchResults=[]; setLoadMoreButtonVisibility()">
+            <div id="searchResCont">
                 <form id="file_upload_test_form" action="#">
                     Select File: <input type="file" name="inpfile" id="inpfile">
                     <input type="submit" value="submit">
@@ -143,34 +159,38 @@
                     <button ng-click="delete()">delete record</button>
                     <button ng-click="update()">update record</button>
                 </div>
-                
 
-                <input id="src-inp" class="ser-bar" type="text" placeholder="search product" 
-                    ng-change="refresh()" ng-model="srcpd"> <button id="cha" ng-click="resetSearchInputArea()">clear</button>
+
+                <input id="src-inp" class="ser-bar" type="text" placeholder="search product" ng-change="refresh()"
+                    ng-model="srcpd"> <button id="cha" ng-click="resetSearchInputArea()">clear</button>
                 <!-- <p id="opt" ng-model="output">{{output}}</p> -->
-                <ul id="search-result-list-container" >
-                    <li id="_{{x.id}}" class="search-result ser-bar " ng-repeat="x in searchResults"  ng-click="proceedWithListItem(this)">
-                        {{x.name}}<span class="pricebar"><b>&#8377</b> {{x.price}}</span> 
+                <ul id="search-result-list-container">
+                    <li id="_{{x.id}}" class="search-result ser-bar " ng-repeat="x in searchResults"
+                        ng-click="proceedWithListItem(this)">
+                        {{x.name}}<span class="pricebar"><b>&#8377</b> {{x.price}}</span>
                     </li>
                     <div id="onhoverSpinnerCont">
                         <form>
                             <fieldset data-quantity></fieldset>
-                            <button class="submitItemButton" id="selectItemButton"><img src="./resources/images/checked32.png" alt=""> </button>
-                            <button class="submitItemButton" id="cancelItemButton"><img src="./resources/images/icons8-cancel-48.png" alt=""> </button>
+                            <button class="submitItemButton" id="selectItemButton"><img
+                                    src="./resources/images/checked32.png" alt=""> </button>
+                            <button class="submitItemButton" id="cancelItemButton"><img
+                                    src="./resources/images/icons8-cancel-48.png" alt=""> </button>
                         </form>
-                        
+
                     </div>
                 </ul>
                 <!-- <li></li><li>{{x.price}}</li> -->
                 <ul id="load-more"><button ng-click="next50result()">load more</button></ul>
-                
+
             </div>
             <p>{{searchTimeLog}}</p>
-            <div id="cart" class="hide">{{selectedItemsCount}} item is ready for billing <a href>proceed</a><button id='close' >x</button></div>
+            <div id="cart" class="hide">{{selectedItemsCount}} item is ready for billing <a href>proceed</a><button
+                    id='close'>x</button></div>
             <!-- href="./invoice.html" -->
         </div>
     </div>
-    
+
 
 
 
