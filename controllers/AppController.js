@@ -14,6 +14,7 @@ angular.module("App", []).controller('AppController', function($scope, $timeout)
     let products = null;
     let from = 0;
     let upto = 0;
+    const loadfactor = 5;
     let totalSearchCount =0;
     let isRequestCompleted = true;
     let prevSelectedListItem = null;
@@ -91,7 +92,7 @@ angular.module("App", []).controller('AppController', function($scope, $timeout)
 
     $scope.next50result = function(){
 
-        upto = from + 5;
+        upto = from + loadfactor;
         let next50result = new Array();
         for(let i=from;i<upto;i++){
             if(products[i]!=undefined)
@@ -102,16 +103,28 @@ angular.module("App", []).controller('AppController', function($scope, $timeout)
         if(next50result.length==0) {
             $scope.searchResults = [];
             //return [];
+        }else{
+            $scope.searchResults = $scope.searchResults.concat(next50result) ;
+            setSelectedItemProperties(next50result);
         }
-        console.log("Top 5 result : ");
-        console.log(next50result);
 
+        console.log(`Top ${loadfactor} result : `);
+        console.log(next50result);
         // next50result.forEach(element => {
         //     $scope.searchResults.push(element);
         // });
-        $scope.searchResults = $scope.searchResults.concat(next50result) ;
-        
     }
+
+    function setSelectedItemProperties(nextSearchResult) { 
+        $scope.$apply();
+        nextSearchResult.forEach((res)=>{
+            if(selectedItems.has(res.id)){
+                console.log("selected item ");
+                console.log($("#_"+res.id));
+                $("#_"+res.id).addClass("selectedItem");
+            }
+        });
+     }
 
     $scope.setLoadMoreButtonVisibility=function(){
         if(totalSearchCount<=upto){
@@ -184,6 +197,7 @@ angular.module("App", []).controller('AppController', function($scope, $timeout)
         $(listElemId).addClass("active");
         prevSelectedListItem = listElem;
         //quantityInput.max = listElem.x.avbl_units;
+
         setItemSubmitButtonVisibility();
         
     }
