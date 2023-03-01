@@ -72,6 +72,15 @@ export const createSchema = {
         } catch (error) {
             throw error;
         }
+    },
+    "stats":function (idb) {
+        try {
+            return idb.createObjectStore("stats", {
+                keyPath: "id"
+            });
+        } catch (error) {
+            throw error;
+        }
     }
 
 }

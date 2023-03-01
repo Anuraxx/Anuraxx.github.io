@@ -11,6 +11,7 @@ angular.module("App", []).controller('InvoiceController', async function($scope)
     });
     //console.log(inProcessInvoiceData);
     let billingProducts = await getProductsByIds(productIds);
+    console.log(`Billing items:: ${billingProducts}`);
     console.log(billingProducts);
     // entry in pendingInvoice table
     // update products

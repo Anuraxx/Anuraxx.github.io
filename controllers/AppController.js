@@ -74,7 +74,7 @@ angular.module("App", []).controller('AppController', function($scope, $timeout)
                 $scope.$apply();
                 //prvQuery=query;
                 isRequestCompleted=true;
-                //$("#_15443").show();
+                //$("#15443").show();
                 if(pendingQuery){
                     //query=pendingQuery;
                     pendingQuery=false;
@@ -116,12 +116,12 @@ angular.module("App", []).controller('AppController', function($scope, $timeout)
     }
 
     function setSelectedItemProperties(nextSearchResult) { 
-        $scope.$apply();
+        //$scope.$apply();
         nextSearchResult.forEach((res)=>{
             if(selectedItems.has(res.id)){
                 console.log("selected item ");
-                console.log($("#_"+res.id));
-                $("#_"+res.id).addClass("selectedItem");
+                console.log($("#"+res.id));
+                $("#"+res.id).addClass("selectedItem");
             }
         });
      }
@@ -186,10 +186,10 @@ angular.module("App", []).controller('AppController', function($scope, $timeout)
         const val = selectedItems.get(listElem.x.id) != undefined ? selectedItems.get(listElem.x.id).qty : 1;
         const max = listElem.x.avbl_units;
         quantityInput.reset(max, val);
-        let listElemId = "#_"+listElem.x.id;
+        let listElemId = "#"+listElem.x.id;
         activeElement.id = listElemId;
         if(prevSelectedListItem!=null){
-            $('#_'+prevSelectedListItem.x.id).removeClass("active");
+            $('#'+prevSelectedListItem.x.id).removeClass("active");
         }
 
         // let elemId = id.toString();
@@ -201,6 +201,7 @@ angular.module("App", []).controller('AppController', function($scope, $timeout)
         setItemSubmitButtonVisibility();
         
     }
+    
     function setItemSubmitButtonVisibility(){
         if(activeElement != null){
             if(selectedItems.has(activeElement.x.id)){

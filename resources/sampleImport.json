@@ -72,8 +72,21 @@
                 "id_product":9780545060455,
                 "qty":5
             }
-        ]
+        ],
+        "emailsent": 0
     }
 ],
-"pendingInvoice":[]
+"pendingInvoice":[],
+"stats":[
+    {
+        "id":1,
+        "total_stocks":{
+            "total_products":12,
+            "total_items":236
+        },
+        "total_invoices": 52,
+        "pending_emails": 4,
+        "last_stock_update_time": "2023-02-08 12:10:00"
+    }
+]
 }

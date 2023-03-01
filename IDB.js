@@ -43,9 +43,13 @@ IDBrequest.onupgradeneeded = async function (e) {
     idb = e.target.result;
     try {
         //createSchema.products(idb);
-        createSchema.pendingInvoice(idb);
-        createSchema.sample(idb);
-        createSchema.orders(idb);
+        // createSchema.pendingInvoice(idb);
+        // createSchema.sample(idb);
+        // createSchema.orders(idb);
+        // createSchema.stats(idb);
+        for (var key in createSchema) {
+            createSchema[key](idb);
+        }
     } catch (error) {
         //console.log(error);
         throw error;
@@ -54,12 +58,12 @@ IDBrequest.onupgradeneeded = async function (e) {
 
 IDBrequest.onsuccess = function (e) {
     //console.log("on success");
-    if (dbExist) console.log('db existed');
+    if (!dbExist) console.log('db not exist');
 
     idb = e.target.result;
     try {
         idbExportImport = new IdbExportImport(idb);
-        console.log(idb.objectStoreNames);
+        //console.log(idb.objectStoreNames);
         dbAccessible = true;
         //exportIdbToJson(idb);
         if(!dbExist) {

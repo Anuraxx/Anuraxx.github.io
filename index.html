@@ -165,7 +165,7 @@
                     ng-model="srcpd"> <button id="cha" ng-click="resetSearchInputArea()">clear</button>
                 <!-- <p id="opt" ng-model="output">{{output}}</p> -->
                 <ul id="search-result-list-container">
-                    <li id="_{{x.id}}" class="search-result ser-bar " ng-repeat="x in searchResults"
+                    <li id="{{x.id}}" class="search-result ser-bar " ng-repeat="x in searchResults"
                         ng-click="proceedWithListItem(this)">
                         {{x.name}}<span class="pricebar"><b>&#8377</b> {{x.price}}</span>
                     </li>

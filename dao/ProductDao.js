@@ -19,13 +19,19 @@ class ProductDao{
             productsOs.getAll().onsuccess = function(e){
                 let res = e.target.result;
                 //console.log(res.value);
-                res.forEach(product => {
+
+                let size= res==undefined ? 0 : res.length;
+
+                if(size==0) resolve(products);
+
+                for ( var product of res ) {
+                    
                     if(product.avbl_units>0){
                         products.push(product);
                     }
-                    
-                });
-                resolve(products);
+                    if(--size==0) resolve(products);
+                }
+                
             }
         });
         
@@ -40,29 +46,26 @@ class ProductDao{
     }
     
     async reloadProductCache0() {
-        //try {
-            return new Promise((resolve)=>{
-                this.getProducts().then((products)=>{
-                    products.sort(function(a, b){
-                        try{
-                            let x = a.name.toLowerCase();
-                            let y = b.name.toLowerCase();
-                            if (x < y) {return -1;}
-                            if (x > y) {return 1;}
-                        }catch(err){
-                            return 0;
-                        }
-                        
-                    });
-                    productCache.setProduct(products);
-                    //console.log("cache loaded");
-                    resolve();
-    
+        return new Promise((resolve)=>{
+            this.getProducts().then((products)=>{
+                products.sort(function(a, b){
+                    try{
+                        let x = a.name.toLowerCase();
+                        let y = b.name.toLowerCase();
+                        if (x < y) {return -1;}
+                        if (x > y) {return 1;}
+                    }catch(err){
+                        return 0;
+                    }
+                    
                 });
+                productCache.setProduct(products);
+                //console.log("cache loaded");
+                resolve();
+
             });
-        // } catch (error) {
-        //     console.log("product cache loading failure");
-        // }
+        });
+
     }
     
     async reloadProductCache() {

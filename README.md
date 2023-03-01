@@ -3,9 +3,14 @@
 # HOW TO RUN THIS ON LOCAL 
 
 - open this project in vscode 
-- install node 
-- install npm live-server package - run cmd "npm i live-server"
-- open vscode terminal 
-- run cmd "live-server --port=number"
+- install any live server plugin
+- start the server
 
-# Know unresolved Bugs
+# Known unresolved Bugs
+[x] no result showing on importing excel data 
+    STR: choose excel file > search any item > no records
+
+
+
+# Tasks
+[] work on invoice generate page > show invoice details in a div using 'pendingInvoice' table > add two buttons (cancel/generate) below > on click 'cancel' - delete entry from 'pendingInvoice' table > on click 'generate' - update related product values in product table then add entry in orders then send email if online and update orders.emailsent accordingly.

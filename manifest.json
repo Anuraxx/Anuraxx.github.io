@@ -2,7 +2,7 @@
     "name": "Invoice Ready",
     "short_name": "Invoice Ready",
     "lang": "en-US",
-    "start_url": "/",
+    "start_url": "/invoice-ready",
     "display": "standalone",
     "background_color": "#5a7c71",
     "theme_color": "black",

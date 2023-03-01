@@ -255,6 +255,7 @@ export async function getProductById(id){
     //return test.getMsg();
 }
 
+/** @return Map<productId:Number, product:Json> */
 export async function getProductsByIds(idList){
     
     return new Promise(async (resolve)=>{

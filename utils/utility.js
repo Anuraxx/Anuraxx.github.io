@@ -9,6 +9,7 @@ export async function monitorExecTime(prefix, callback){
     console.log(prefix+runtime/1000+"s");
     return cbResult;
   }
+  
 //static second="second";
 export class Timer{
   static SEC ="second";
@@ -56,7 +57,7 @@ export class Timer{
   }
 }
 
-
+// get json from .json file
 export async function getJsonFromFile(filepath) {
     //var data=null;
     return new Promise((resolve)=>{
@@ -66,7 +67,7 @@ export async function getJsonFromFile(filepath) {
   }
 
 
-
+// excel sheet to json
 export async function sheetToJson(fileData){
   var reader = new FileReader();
   var jsonData= null;
@@ -87,6 +88,7 @@ export async function sheetToJson(fileData){
   }
 }
 
+// json to excel sheet
 export function jsonToSheet(jsonArray, filename){
   filename = (filename!=null && (filename=filename.trim())!='') ? filename : 'database_import';
   var wb = XLSX.utils.book_new();
@@ -98,46 +100,3 @@ export function jsonToSheet(jsonArray, filename){
   saveAs(new Blob([wbout],{type:"application/octet-stream"}), `${filename}.xlsx`);
   //console.log(ws);
 }
-
-
-// export async function promiseTest () {
-//   return new Promise((resolve)=>{
-//     setInterval(()=>{
-//       console.log("hello");
-//       resolve(10);
-//     },2000);
-//   })
-//   //return Promise.resolve(10);
-// }
-
-// export function impexp(){ 
-//   console.log("impexp");
-//   const db = new Dexie('pwa_db');
-//   //  console.log(db);
-//   db.version(1).stores({
-//     items: 'id, name, size, total_units, avbl_units, price, color, material',
-//   });
-//   db.open().then(function() {
-//     const idbDatabase = db.backendDB(); // get native IDBDatabase object from Dexie wrapper
-  
-//     // export to JSON, clear database, and import from JSON
-//     IDBExportImport.exportToJsonString(idbDatabase, function(err, jsonString) {
-//       if (err) {
-//         console.error(err);
-//       } else {
-//         console.log('Exported as JSON: ' + jsonString);
-//         IDBExportImport.clearDatabase(idbDatabase, function(err) {
-//           if (!err) { // cleared data successfully
-//             IDBExportImport.importFromJsonString(idbDatabase, jsonString, function(err) {
-//               if (!err) {
-//                 console.log('Imported data successfully');
-//               }
-//             });
-//           }
-//         });
-//       }
-//     });
-//   }).catch(function(e) {
-//     console.error('Could not connect. ' + e);
-//   });
-// }
