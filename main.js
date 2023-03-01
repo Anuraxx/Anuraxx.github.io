@@ -14,6 +14,8 @@ if('serviceWorker' in navigator){
             console.log(err);
         });
     }
+}else{
+  console.warn('service worker property not exists');
 }
 
 $('button').on('click', function(){
